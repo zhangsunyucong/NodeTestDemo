@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var AV = require('leanengine');
+var apiManager = require('./api/apiManager.js');
 
 // 加载云函数定义，你可以将云函数拆分到多个文件方便管理，但需要在主文件中加载它们
 require('./cloud');
@@ -31,13 +32,36 @@ app.enable('trust proxy');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//注册HTTP消息头部信息
+app.use(
+	function(req, res, next) {
+		res.set(
+			{
+				'Content-Type': 'text/html',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Rememberme': true,
+                'Access-Control-Allow-HttpOnly': false,
+                'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Credentials': true, //false,
+                'Access-Control-Max-Age': '86400', // 24 hours
+                'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+			}
+		);
+		console.log('%s %s', req.method, req.url);
+        next();
+	}
+);
 
+//首页
 app.get('/', function(req, res) {
   res.render('index', { currentTime: new Date() });
 });
 
 // 可以将一类的路由单独保存在一个文件中
 app.use('/todos', require('./routes/todos'));
+
+//API注册
+apiManager.bind(app);
 
 app.use(function(req, res, next) {
   // 如果任何一个路由都没有返回响应，则抛出一个 404 异常给后续的异常处理器
