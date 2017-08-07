@@ -5,7 +5,8 @@
 exports.bind = function(app) {
     //注册用户接口
    // require('../api/user/userLoginApi.js').loginApi(app);
-    require('./user/userService.js').userLoginApi(app);
+    require('./user/userRegisterApi.js').userRegisterApi(app);
+    require('./user/userLoginApi.js').userLoginApi(app);
 
 };
 

@@ -10,9 +10,9 @@ var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility
 
 AV.Cloud.useMasterKey();
 
-exports.userLoginApi = function(app) {
+exports.userRegisterApi = function(app) {
 
-    app.get('/user/login/:userName/:password', function(req, res) {
+    app.get('/user/register/:userName/:password', function(req, res) {
         //获取参数
         var userName = req.params.userName;
         var password = req.params.password;
@@ -51,7 +51,7 @@ exports.userLoginApi = function(app) {
             resJson = {
                 "data": ''+ userName + '用户名已经存在',
                 "msg": error.message,
-                "status": 201
+                "status": error.code
             };
             res.end(jsonUtil.josnObj2JsonString(resJson));
         });
