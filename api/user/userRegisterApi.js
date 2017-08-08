@@ -12,6 +12,91 @@ AV.Cloud.useMasterKey();
 
 exports.userRegisterApi = function(app) {
 
+    app.get('/user/register/requestSmsCode/:userPhoneNum', function (req, res) {
+
+        var userPhoneNum = req.params.userPhoneNum;
+
+        var resJson;
+
+        if(paramUtility.isEnpty(userPhoneNum)) {
+            resJson = {
+                "data": "",
+                "msg": "手机号不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        //手机号格式验证
+        /*if() {
+
+        }*/
+
+        AV.Cloud.requestSmsCode(userPhoneNum).then(function (success) {
+            resJson = {
+                "data": "手机验证码已经发送",
+                "msg": "手机验证码已经发送",
+                "status": 200
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+        }, function (error) {
+            resJson = {
+                "data": "手机验证码发送失败",
+                "msg": error.message,
+                "status": error.code
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+        });
+
+    });
+
+    app.get('/user/register/byPhoneNum/:userPhoneNum/:smsCode', function (req, res) {
+
+        var userPhoneNum = req.params.userPhoneNum;
+        var smsCode = req.params.smsCode;
+
+        var resJson;
+        if(paramUtility.isEnpty(userPhoneNum)) {
+            resJson = {
+                "data": "",
+                "msg": "输入的手机号不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        if(paramUtility.isEnpty(smsCode)) {
+            resJson = {
+                "data": "",
+                "msg": "输入的验证码不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        AV.User.signUpOrlogInWithMobilePhone(userPhoneNum, smsCode)
+            .then(function (success) {
+                //成功
+                resJson = {
+                    "data": "",
+                    "msg": "验证通过",
+                    "status": 200
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+            }, function (error) {
+                // 失败
+                resJson = {
+                    "data": "",
+                    "msg": "验证码不对",
+                    "status": 201
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+        });
+    });
+
     app.get('/user/register/:userName/:password', function(req, res) {
         //获取参数
         var userName = req.params.userName;
