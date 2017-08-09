@@ -55,7 +55,53 @@ exports.userLoginApi = function (app) {
             });
     });
 
-    app.get('/user/login/:userName/:password', function (req, res) {
+    app.get('/user/loginByMobile/:userPhoneNum/:password', function (req, res) {
+        var userPhoneNum = req.params.userPhoneNum;
+        var password = req.params.password;
+
+        var resJson;
+
+        if(paramUtility.isEnpty(userPhoneNum)) {
+            resJson = {
+                "data": {},
+                "msg": "输入的手机号不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        if(paramUtility.isEnpty(password)) {
+            resJson = {
+                "data": {},
+                "msg": "输入的密码不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        AV.User.logInWithMobilePhone(userPhoneNum, password)
+            .then(function (loginedUser) {
+                console.log(loginedUser);
+                resJson = {
+                    "data": loginedUser,
+                    "msg": "登录成功",
+                    "status": 200
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+            }, (function (error) {
+                resJson = {
+                    "data": {},
+                    "msg": "用户名和密码不匹配",
+                    "status": err.code
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+            }));
+
+    });
+
+    app.get('/user/loginByName/:userName/:password', function (req, res) {
         var userName = req.params.userName;
         var password = req.params.password;
 
@@ -100,4 +146,50 @@ exports.userLoginApi = function (app) {
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             });
     });
+
+    //user/loginByName/{userPhoneNum}/{smsCode}
+    app.get('/user/loginBySMSCode/:userPhoneNum/:smsCode', function (req, res) {
+        var userPhoneNum = req.params.userPhoneNum;
+        var smsCode = req.params.smsCode;
+
+        var resJson;
+        if(paramUtility.isEnpty(userPhoneNum)) {
+            resJson = {
+                "data": "",
+                "msg": "输入的手机号不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        if(paramUtility.isEnpty(smsCode)) {
+            resJson = {
+                "data": "",
+                "msg": "输入的验证码不能为空",
+                "status": 202
+            };
+            res.end(jsonUtil.josnObj2JsonString(resJson));
+            return;
+        }
+
+        AV.User.signUpOrlogInWithMobilePhone(userPhoneNum, smsCode)
+            .then(function (success) {
+                resJson = {
+                    "data": {},
+                    "msg": "验证通过",
+                    "status": 200
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+            }, function (error) {
+                // 失败
+                resJson = {
+                    "data": "",
+                    "msg": error.message,
+                    "status": 201
+                };
+                res.end(jsonUtil.josnObj2JsonString(resJson));
+            });
+    });
+
 };

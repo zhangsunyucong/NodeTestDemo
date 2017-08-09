@@ -51,10 +51,12 @@ exports.userRegisterApi = function(app) {
 
     });
 
-    app.get('/user/register/byPhoneNum/:userPhoneNum/:smsCode', function (req, res) {
+    app.get('/user/register/byPhoneNum/:userPhoneNum/:nickName/:smsCode/:password', function (req, res) {
 
         var userPhoneNum = req.params.userPhoneNum;
+        var nickName = req.params.nickName;
         var smsCode = req.params.smsCode;
+        var password = req.params.password;
 
         var resJson;
         if(paramUtility.isEnpty(userPhoneNum)) {
@@ -79,25 +81,47 @@ exports.userRegisterApi = function(app) {
 
         AV.User.signUpOrlogInWithMobilePhone(userPhoneNum, smsCode)
             .then(function (success) {
-                //成功
-                resJson = {
-                    "data": "",
-                    "msg": "验证通过",
-                    "status": 200
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                var query = new AV.Query('_User');
+                query.equalTo("mobilePhoneNumber", userPhoneNum);
+                query.find().then(function (results) {
+                    var result = results[0];
+                    result.setPassword(password);
+                    result.setUsername(nickName);
+                    result.save().then(function (result) {
+                        resJson = {
+                            "data": {},
+                            "msg": "验证通过",
+                            "status": 200
+                        };
+                        res.end(jsonUtil.josnObj2JsonString(resJson));
+                    }, function (error) {
+                        resJson = {
+                            "data": "",
+                            "msg": error.message,
+                            "status": 201
+                        };
+                        res.end(jsonUtil.josnObj2JsonString(resJson));
+                    });
+                }, function (error) {
+                    resJson = {
+                        "data": "",
+                        "msg": error.message,
+                        "status": 201
+                    };
+                    res.end(jsonUtil.josnObj2JsonString(resJson));
+                });
             }, function (error) {
                 // 失败
                 resJson = {
                     "data": "",
-                    "msg": "验证码不对",
+                    "msg": error.message,
                     "status": 201
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
         });
     });
 
-    app.get('/user/register/:userName/:password', function(req, res) {
+    app.get('/user/register/ByUserName/:userName/:password', function(req, res) {
         //获取参数
         var userName = req.params.userName;
         var password = req.params.password;
@@ -120,8 +144,7 @@ exports.userRegisterApi = function(app) {
         user.setUsername(userName);
         // 设置密码
         user.setPassword(password);
-        // 设置邮箱
-        user.setEmail('tom@leancloud.cn');
+
         user.signUp().then(function (loginedUser) {
             //成功响应
             resJson = {
