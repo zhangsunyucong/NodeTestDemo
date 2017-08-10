@@ -89,7 +89,7 @@ exports.userRegisterApi = function(app) {
                     result.setUsername(nickName);
                     result.save().then(function (result) {
                         resJson = {
-                            "data": {},
+                            "data": "",
                             "msg": "验证通过",
                             "status": 200
                         };
@@ -148,7 +148,7 @@ exports.userRegisterApi = function(app) {
         user.signUp().then(function (loginedUser) {
             //成功响应
             resJson = {
-                "data": todo.id,
+                "data": loginedUser.id,
                 "msg": '小伙子（大美女)' + loginedUser.getUsername() + '终于等到你了，马上去登录吧',
                 "status": 200
             };

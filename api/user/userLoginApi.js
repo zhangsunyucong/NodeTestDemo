@@ -94,7 +94,7 @@ exports.userLoginApi = function (app) {
                 resJson = {
                     "data": {},
                     "msg": "用户名和密码不匹配",
-                    "status": err.code
+                    "status": error.code
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             }));
@@ -141,13 +141,11 @@ exports.userLoginApi = function (app) {
                     "msg": "用户名和密码不匹配",
                     "status": err.code
                 };
-                // console.log(paramUtility.getParamType(resJson));
-                //console.log(paramUtility.getParamType(jsonUtil.josnObj2JsonString(resJson)));
+
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             });
     });
 
-    //user/loginByName/{userPhoneNum}/{smsCode}
     app.get('/user/loginBySMSCode/:userPhoneNum/:smsCode', function (req, res) {
         var userPhoneNum = req.params.userPhoneNum;
         var smsCode = req.params.smsCode;
@@ -155,7 +153,7 @@ exports.userLoginApi = function (app) {
         var resJson;
         if(paramUtility.isEnpty(userPhoneNum)) {
             resJson = {
-                "data": "",
+                "data": {},
                 "msg": "输入的手机号不能为空",
                 "status": 202
             };
@@ -165,7 +163,7 @@ exports.userLoginApi = function (app) {
 
         if(paramUtility.isEnpty(smsCode)) {
             resJson = {
-                "data": "",
+                "data": {},
                 "msg": "输入的验证码不能为空",
                 "status": 202
             };
@@ -184,12 +182,42 @@ exports.userLoginApi = function (app) {
             }, function (error) {
                 // 失败
                 resJson = {
-                    "data": "",
+                    "data": {},
                     "msg": error.message,
                     "status": 201
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             });
     });
+
+    var getUserInfosByUserPhoneNum = function (userPhoneNum, failCallback, successCallback) {
+        if(paramUtility.isEnpty(userPhoneNum)) {
+            failCallback('手机号不能为空');
+            return;
+        }
+
+        var query = new AV.Query('_User');
+        query.equalTo("mobilePhoneNumber", userPhoneNum);
+        query.find().then(function (results) {
+            successCallback(results);
+        }, function (error) {
+            failCallback(error.message);
+        });
+    };
+
+    var getUserInfosByUserName = function (userName, failCallback, successCallback) {
+        if(paramUtility.isEnpty(userName)) {
+            failCallback('用户名/昵称不能为空');
+            return;
+        }
+
+        var query = new AV.Query('_User');
+        query.equalTo("username", userName);
+        query.find().then(function (results) {
+            successCallback(results);
+        }, function (error) {
+            failCallback(error.message);
+        });
+    };
 
 };
