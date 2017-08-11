@@ -9,55 +9,11 @@ AV.Cloud.useMasterKey();
 
 
 exports.userLoginApi = function (app) {
-    app.get('/user/login', function (req, res) {
-        var userName = req.query.userName;
-        var password = req.query.password;
 
-        var resJson;
-
-        if(paramUtility.isEnpty(userName)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的用户名不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
-            return;
-        }
-
-        if(paramUtility.isEnpty(password)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的密码不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
-            return;
-        }
-
-        AV.User.logIn(userName, password)
-            .then(function (loginUser) {
-                resJson = {
-                    "data": loginUser,
-                    "msg": "登录成功",
-                    "status": 200
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
-            }, function (err) {
-                resJson = {
-                    "data": {},
-                    "msg": "用户名和密码不匹配",
-                    "status": err.code
-                };
-               // console.log(paramUtility.getParamType(resJson));
-                //console.log(paramUtility.getParamType(jsonUtil.josnObj2JsonString(resJson)));
-                res.end(jsonUtil.josnObj2JsonString(resJson));
-            });
-    });
-
-    app.get('/user/loginByMobile/:userPhoneNum/:password', function (req, res) {
-        var userPhoneNum = req.params.userPhoneNum;
-        var password = req.params.password;
+///user/loginByMobile/:userPhoneNum/:password
+    app.post('/user/loginByMobile', function (req, res) {
+        var userPhoneNum = req.body.userPhoneNum;
+        var password = req.body.password;
 
         var resJson;
 
@@ -100,10 +56,10 @@ exports.userLoginApi = function (app) {
             }));
 
     });
-
-    app.get('/user/loginByName/:userName/:password', function (req, res) {
-        var userName = req.params.userName;
-        var password = req.params.password;
+///user/loginByName/:userName/:password
+    app.post('/user/loginByName', function (req, res) {
+        var userName = req.body.userName;
+        var password = req.body.password;
 
         var resJson;
 
@@ -145,10 +101,10 @@ exports.userLoginApi = function (app) {
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             });
     });
-
-    app.get('/user/loginBySMSCode/:userPhoneNum/:smsCode', function (req, res) {
-        var userPhoneNum = req.params.userPhoneNum;
-        var smsCode = req.params.smsCode;
+///user/loginBySMSCode/:userPhoneNum/:smsCode
+    app.post('/user/loginBySMSCode', function (req, res) {
+        var userPhoneNum = req.body.userPhoneNum;
+        var smsCode = req.body.smsCode;
 
         var resJson;
         if(paramUtility.isEnpty(userPhoneNum)) {
@@ -173,12 +129,14 @@ exports.userLoginApi = function (app) {
 
         AV.User.signUpOrlogInWithMobilePhone(userPhoneNum, smsCode)
             .then(function (success) {
+
                 resJson = {
-                    "data": {},
+                    "data": success,
                     "msg": "验证通过",
                     "status": 200
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
+
             }, function (error) {
                 // 失败
                 resJson = {

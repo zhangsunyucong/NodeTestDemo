@@ -11,10 +11,10 @@ var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility
 AV.Cloud.useMasterKey();
 
 exports.userRegisterApi = function(app) {
+///user/register/requestSmsCode/:userPhoneNum'
+    app.post('/user/register/requestSmsCode', function (req, res) {
 
-    app.get('/user/register/requestSmsCode/:userPhoneNum', function (req, res) {
-
-        var userPhoneNum = req.params.userPhoneNum;
+        var userPhoneNum = req.body.userPhoneNum;
 
         var resJson;
 
@@ -51,12 +51,13 @@ exports.userRegisterApi = function(app) {
 
     });
 
-    app.get('/user/register/byPhoneNum/:userPhoneNum/:nickName/:smsCode/:password', function (req, res) {
+    ///user/register/byPhoneNum/:userPhoneNum/:nickName/:smsCode/:password
+    app.post('/user/register/byPhoneNum', function (req, res) {
 
-        var userPhoneNum = req.params.userPhoneNum;
-        var nickName = req.params.nickName;
-        var smsCode = req.params.smsCode;
-        var password = req.params.password;
+        var userPhoneNum = req.body.userPhoneNum;
+        var nickName = req.body.nickName;
+        var smsCode = req.body.smsCode;
+        var password = req.body.password;
 
         var resJson;
         if(paramUtility.isEnpty(userPhoneNum)) {
@@ -121,10 +122,11 @@ exports.userRegisterApi = function(app) {
         });
     });
 
-    app.get('/user/register/ByUserName/:userName/:password', function(req, res) {
+    ///user/register/ByUserName/:userName/:password
+    app.post('/user/register/ByUserName', function(req, res) {
         //获取参数
-        var userName = req.params.userName;
-        var password = req.params.password;
+        var userName = req.body.userName;
+        var password = req.body.password;
         //响应对象
         var resJson;
         //参数检查有效性

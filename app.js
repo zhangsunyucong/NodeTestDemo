@@ -47,6 +47,8 @@ app.use(
                 'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
 			}
 		);
+
+		//decodeURI(req.url)
 		console.log('%s %s', req.method, req.url);
         next();
 	}
