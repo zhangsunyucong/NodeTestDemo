@@ -10,8 +10,23 @@ var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility
 
 AV.Cloud.useMasterKey();
 
+/***********************************************************************************
+ * 创建人：何允俭
+ * 创建日期：2017-08-13
+ * 功能说明：注册功能模块
+ ***********************************************************************************/
+
 exports.userRegisterApi = function(app) {
-///user/register/requestSmsCode/:userPhoneNum'
+
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：请求手机验证码
+     * 参数说明：userPhoneNum 手机号
+     * 返回值：
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/register/requestSmsCode', function (req, res) {
 
         var userPhoneNum = req.body.userPhoneNum;
@@ -51,7 +66,18 @@ exports.userRegisterApi = function(app) {
 
     });
 
-    ///user/register/byPhoneNum/:userPhoneNum/:nickName/:smsCode/:password
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：通过手机号注册
+     * 参数说明：userPhoneNum 手机号
+     *          nickName 昵称
+     *          smsCode 短信验证码
+     *          password 密码
+     * 返回值：
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/register/byPhoneNum', function (req, res) {
 
         var userPhoneNum = req.body.userPhoneNum;
@@ -122,7 +148,16 @@ exports.userRegisterApi = function(app) {
         });
     });
 
-    ///user/register/ByUserName/:userName/:password
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：通过用户名注册
+     * 参数说明：userName 昵称
+     *          password 密码
+     * 返回值：
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/register/ByUserName', function(req, res) {
         //获取参数
         var userName = req.body.userName;

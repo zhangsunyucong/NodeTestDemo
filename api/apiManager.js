@@ -7,6 +7,7 @@ exports.bind = function(app) {
    // require('../api/user/userLoginApi.js').loginApi(app);
     require('./user/userRegisterApi.js').userRegisterApi(app);
     require('./user/userLoginApi.js').userLoginApi(app);
+    require('./vitae/vitaeApi.js').vitaeApi(app);
 
 };
 

@@ -7,10 +7,23 @@ var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility
 
 AV.Cloud.useMasterKey();
 
-
+/***********************************************************************************
+ * 创建人：何允俭
+ * 创建日期：2017-08-13
+ * 功能说明：登录功能模块
+ ***********************************************************************************/
 exports.userLoginApi = function (app) {
 
-///user/loginByMobile/:userPhoneNum/:password
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：用户通过手机号和密码登录
+     * 参数说明：userPhoneNum 手机号
+     *          password 用户登录密码
+     * 返回值：用户信息
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/loginByMobile', function (req, res) {
         var userPhoneNum = req.body.userPhoneNum;
         var password = req.body.password;
@@ -56,7 +69,17 @@ exports.userLoginApi = function (app) {
             }));
 
     });
-///user/loginByName/:userName/:password
+
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：用户通过用户名和密码登录
+     * 参数说明：userName 用户名
+     *          password 用户登录密码
+     * 返回值：用户信息
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/loginByName', function (req, res) {
         var userName = req.body.userName;
         var password = req.body.password;
@@ -101,7 +124,17 @@ exports.userLoginApi = function (app) {
                 res.end(jsonUtil.josnObj2JsonString(resJson));
             });
     });
-///user/loginBySMSCode/:userPhoneNum/:smsCode
+
+    /***********************************************************************************
+     * 创建人：何允俭
+     * 创建日期：2017-08-13
+     * 功能说明：用户通过手机验证码登录
+     * 参数说明：userPhoneNum 手机号
+     *          smsCode 手机验证码
+     * 返回值：用户信息
+     * 评审人：
+     * 评审时间：
+     ***********************************************************************************/
     app.post('/user/loginBySMSCode', function (req, res) {
         var userPhoneNum = req.body.userPhoneNum;
         var smsCode = req.body.smsCode;
