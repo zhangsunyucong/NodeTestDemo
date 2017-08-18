@@ -16,7 +16,8 @@
     "express": "4.12.3",
     "leancloud-realtime": "^3.5.5",
     "leancloud-storage": "^3.0.4",
-    "leanengine": "^3.0.0"
+    "leanengine": "^3.0.0",
+    "node-rsa": "^0.4.2"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

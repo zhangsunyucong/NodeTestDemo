@@ -4,9 +4,20 @@ var AV = require('leanengine');
 var jsonUtil = require('../../lib/common/json.js');
 var leanCloudUtils = require('../leanCloudUtils').leanCloudUtils;
 var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility;
+var aesUtils = require('../../lib/util/aes.js').AESUtils;
+var decAndEncConfig = require('../../lib/util/decAndEncConfig.js').decAndEnc;
 
 AV.Cloud.useMasterKey();
 
+var rsa = require('node-rsa');
+
+//create RSA-key
+var key = new rsa({b: 1024});
+var serverPrivateKey = new rsa(decAndEncConfig.getServerPrivateKey());
+var clientPublicKey = new rsa(decAndEncConfig.getClientPublicKey());
+serverPrivateKey.setOptions({encryptionScheme: 'pkcs1'});
+clientPublicKey.setOptions({encryptionScheme: 'pkcs1'});
+//var key = new rsa(privateKey,  'pkcs1-private-pem');
 /***********************************************************************************
  * 创建人：何允俭
  * 创建日期：2017-08-13
@@ -28,8 +39,10 @@ exports.userLoginApi = function (app) {
         var userPhoneNum = req.body.userPhoneNum;
         var password = req.body.password;
 
+        userPhoneNum = serverPrivateKey.decrypt(userPhoneNum, 'utf-8');
         var resJson;
-
+        console.log("私：\n" +  key.exportKey('private'));
+        console.log("公：\n" +  key.exportKey('public'));
         if(paramUtility.isEnpty(userPhoneNum)) {
             resJson = {
                 "data": {},
@@ -55,18 +68,18 @@ exports.userLoginApi = function (app) {
                 console.log(loginedUser);
                 resJson = {
                     "data": loginedUser,
-                    "msg": "登录成功",
+                    "msg": clientPublicKey.encrypt("登录成功", 'base64', 'utf-8'),
                     "status": 200
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
-            }, (function (error) {
+            }, function (error) {
                 resJson = {
                     "data": {},
                     "msg": "用户名和密码不匹配",
                     "status": error.code
                 };
                 res.end(jsonUtil.josnObj2JsonString(resJson));
-            }));
+            });
 
     });
 
