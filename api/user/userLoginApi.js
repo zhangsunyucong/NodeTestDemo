@@ -4,20 +4,12 @@ var AV = require('leanengine');
 var jsonUtil = require('../../lib/common/json.js');
 var leanCloudUtils = require('../leanCloudUtils').leanCloudUtils;
 var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility;
-var aesUtils = require('../../lib/util/aes.js').AESUtils;
-var decAndEncConfig = require('../../lib/util/decAndEncConfig.js').decAndEnc;
+var decAndEncHelper = require('../../lib/util/decAndEncHelper.js').decAndEncHelper;
+var resUtils = require('../../lib/util/responseUtils.js').resUtils;
+var errorUtils = require('../../lib/util/ErrorCodeUtils.js').errorUtils;
 
 AV.Cloud.useMasterKey();
 
-var rsa = require('node-rsa');
-
-//create RSA-key
-var key = new rsa({b: 1024});
-var serverPrivateKey = new rsa(decAndEncConfig.getServerPrivateKey());
-var clientPublicKey = new rsa(decAndEncConfig.getClientPublicKey());
-serverPrivateKey.setOptions({encryptionScheme: 'pkcs1'});
-clientPublicKey.setOptions({encryptionScheme: 'pkcs1'});
-//var key = new rsa(privateKey,  'pkcs1-private-pem');
 /***********************************************************************************
  * 创建人：何允俭
  * 创建日期：2017-08-13
@@ -39,46 +31,29 @@ exports.userLoginApi = function (app) {
         var userPhoneNum = req.body.userPhoneNum;
         var password = req.body.password;
 
-        userPhoneNum = serverPrivateKey.decrypt(userPhoneNum, 'utf-8');
-        var resJson;
-        console.log("私：\n" +  key.exportKey('private'));
-        console.log("公：\n" +  key.exportKey('public'));
+        if(!decAndEncHelper.valideSign(req)) {
+            return;
+        }
+
         if(paramUtility.isEnpty(userPhoneNum)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的手机号不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的手机号不能为空", errorUtils.paramsErrorCode);
             return;
         }
 
         if(paramUtility.isEnpty(password)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的密码不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的密码不能为空", errorUtils.paramsErrorCode);
             return;
         }
+
+        userPhoneNum = decAndEncHelper.decryptByserverPrivateKey(userPhoneNum);
+        password = decAndEncHelper.decryptByserverPrivateKey(password);
 
         AV.User.logInWithMobilePhone(userPhoneNum, password)
             .then(function (loginedUser) {
                 console.log(loginedUser);
-                resJson = {
-                    "data": loginedUser,
-                    "msg": clientPublicKey.encrypt("登录成功", 'base64', 'utf-8'),
-                    "status": 200
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                resUtils.resWithData(res, loginedUser,"登录成功", errorUtils.successCode);
             }, function (error) {
-                resJson = {
-                    "data": {},
-                    "msg": "用户名和密码不匹配",
-                    "status": error.code
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                resUtils.resWithData(res, {},"用户名和密码不匹配", error.code);
             });
 
     });
@@ -97,44 +72,28 @@ exports.userLoginApi = function (app) {
         var userName = req.body.userName;
         var password = req.body.password;
 
-        var resJson;
+        if(!decAndEncHelper.valideSign(req)) {
+            return;
+        }
 
         if(paramUtility.isEnpty(userName)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的用户名不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的用户名不能为空", errorUtils.paramsErrorCode);
             return;
         }
 
         if(paramUtility.isEnpty(password)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的密码不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的密码不能为空", errorUtils.paramsErrorCode);
             return;
         }
 
+        userName = decAndEncHelper.decryptByserverPrivateKey(userName);
+        password = decAndEncHelper.decryptByserverPrivateKey(password);
+
         AV.User.logIn(userName, password)
             .then(function (loginUser) {
-                resJson = {
-                    "data": loginUser,
-                    "msg": "登录成功",
-                    "status": 200
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                resUtils.resWithData(res, loginUser,"登录成功", errorUtils.successCode);
             }, function (err) {
-                resJson = {
-                    "data": {},
-                    "msg": "用户名和密码不匹配",
-                    "status": err.code
-                };
-
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                resUtils.resWithData(res, {},"用户名和密码不匹配", err.code);
             });
     });
 
@@ -152,45 +111,28 @@ exports.userLoginApi = function (app) {
         var userPhoneNum = req.body.userPhoneNum;
         var smsCode = req.body.smsCode;
 
-        var resJson;
+        if(!decAndEncHelper.valideSign(req)) {
+            return;
+        }
+
         if(paramUtility.isEnpty(userPhoneNum)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的手机号不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的手机号不能为空", errorUtils.paramsErrorCode);
             return;
         }
 
         if(paramUtility.isEnpty(smsCode)) {
-            resJson = {
-                "data": {},
-                "msg": "输入的验证码不能为空",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {},"输入的验证码不能为空", errorUtils.paramsErrorCode);
             return;
         }
 
+        userPhoneNum = decAndEncHelper.decryptByserverPrivateKey(userPhoneNum);
+
         AV.User.signUpOrlogInWithMobilePhone(userPhoneNum, smsCode)
             .then(function (success) {
-
-                resJson = {
-                    "data": success,
-                    "msg": "验证通过",
-                    "status": 200
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
-
+                resUtils.resWithData(res, success,"验证通过", errorUtils.successCode);
             }, function (error) {
                 // 失败
-                resJson = {
-                    "data": {},
-                    "msg": error.message,
-                    "status": 201
-                };
-                res.end(jsonUtil.josnObj2JsonString(resJson));
+                resUtils.resWithData(res, {},error.message, error.code);
             });
     });
 

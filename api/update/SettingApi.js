@@ -4,39 +4,27 @@ var AV = require('leanengine');
 var jsonUtil = require('../../lib/common/json.js');
 var leanCloudUtils = require('../leanCloudUtils').leanCloudUtils;
 var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility;
+var decAndEncHelper = require('../../lib/util/decAndEncHelper.js').decAndEncHelper;
+var resUtils = require('../../lib/util/responseUtils.js').resUtils;
+var errorUtils = require('../../lib/util/ErrorCodeUtils.js').errorUtils;
 
 exports.settingApi = function (app) {
 
     app.get('/update/getUpdateInfo', function (req, res) {
 
-        var resJson;
         var query = new AV.Query('update');
          query.find().then(function (results) {
 
             if(!paramUtility.isNULL(results) && paramUtility.isArray(results)) {
                 if(results.length > 0) {
-                    resJson = {
-                        "data": results[0],
-                        "msg": "",
-                        "status": 200
-                    };
+                    resUtils.resWithData(res, results[0], "", errorUtils.successCode);
                 } else {
-                    resJson = {
-                        "data": {},
-                        "msg": "没有数据",
-                        "status": 201
-                    };
+                    resUtils.resWithData(res, {}, "没有数据", errorUtils.noData);
                 }
-                res.end(jsonUtil.josnObj2JsonString(resJson));
             }
 
         }, function (error) {
-            resJson = {
-                "data": {},
-                "msg": error.message,
-                "status": error.code
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+             resUtils.resWithData(res, {}, error.message, error.code);
         });
     });
 
@@ -45,15 +33,8 @@ exports.settingApi = function (app) {
         var userPhoneNum = req.body.usePhoneNum;
         var clientType = req.body.clientType;
 
-        var resJson;
-
         if(paramUtility.isEnpty(content)) {
-            resJson = {
-                "data": "",
-                "msg": "请输入吐槽的内容！",
-                "status": 202
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, "", "请输入吐槽的内容", errorUtils.paramsErrorCode);
             return;
         }
 
@@ -63,19 +44,9 @@ exports.settingApi = function (app) {
         feedback.set('content', content);
         feedback.set('userPhoneNum', userPhoneNum);
         feedback.save().then(function (object) {
-            resJson = {
-                "data": "提交成功",
-                "msg":"提交成功",
-                "status": 200
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, "提交成功", "感谢你的吐槽", errorUtils.successCode);
         }, function (error) {
-            resJson = {
-                "data": "",
-                "msg":error.message,
-                "status": error.error
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, "", error.message, error.code);
         });
 
     });

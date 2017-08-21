@@ -4,6 +4,9 @@ var AV = require('leanengine');
 var jsonUtil = require('../../lib/common/json.js');
 var leanCloudUtils = require('../leanCloudUtils').leanCloudUtils;
 var paramUtility = require('../../lib/util/paramsTypeUtils.js').paramTypeUtility;
+var decAndEncHelper = require('../../lib/util/decAndEncHelper.js').decAndEncHelper;
+var resUtils = require('../../lib/util/responseUtils.js').resUtils;
+var errorUtils = require('../../lib/util/ErrorCodeUtils.js').errorUtils;
 
 /***********************************************************************************
  * 创建人：何允俭
@@ -25,6 +28,11 @@ exports.vitaeApi = function (app) {
 
         var userId = req.body.userId;
 
+        if(!decAndEncHelper.valideSign(req)) {
+            return;
+        }
+
+        userId = decAndEncHelper.decryptByserverPrivateKey(userId);
   /*      if(paramUtility.isEnpty(userId)) {
             resJson = {
                 "data": {},
@@ -34,31 +42,15 @@ exports.vitaeApi = function (app) {
             res.end(jsonUtil.josnObj2JsonString(resJson));
         }*/
 
-        var resJson;
         var query = new AV.Query('Vitae');
         query.find().then(function (results) {
             if(!paramUtility.isEnpty(results) && results.length > 0) {
-                resJson = {
-                    "data": results[0],
-                    "msg": "",
-                    "status": 200
-                };
+                resUtils.resWithData(res, results[0], "", errorUtils.successCode);
             } else {
-                resJson = {
-                    "data": {},
-                    "msg": "没有数据",
-                    "status": 203
-                };
+                resUtils.resWithData(res, {}, "没有数据", errorUtils.noData);
             }
-
-            res.end(jsonUtil.josnObj2JsonString(resJson));
         }, function (error) {
-            resJson = {
-                "data": {},
-                "msg": error.message,
-                "status": error.code
-            };
-            res.end(jsonUtil.josnObj2JsonString(resJson));
+            resUtils.resWithData(res, {}, error.message, error.code);
         });
     });
 
@@ -210,12 +202,7 @@ exports.vitaeApi = function (app) {
                 "blogType": "android"
             }
         ];
-        var resJson = {
-            "data": infos,
-            "msg": "获取数据成功",
-            "status": 200
-        };
-        res.end(jsonUtil.josnObj2JsonString(resJson));
-    })
+        resUtils.resWithData(res, infos, "获取数据成功", errorUtils.successCode);
+    });
 
 };
