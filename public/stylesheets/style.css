@@ -5,3 +5,10 @@ body {
 a {
   color: #00b7ff;
 }
+
+img{
+  width: auto;
+  height:auto;
+  max-height: 100%;
+  max-width: 100%;
+}
