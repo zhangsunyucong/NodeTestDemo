@@ -9,6 +9,7 @@ exports.bind = function(app) {
     require('./user/userLoginApi.js').userLoginApi(app);
     require('./vitae/vitaeApi.js').vitaeApi(app);
     require('./update/SettingApi.js').settingApi(app);
+    require('./uploadApi.js').upload(app);
 
 };
 
