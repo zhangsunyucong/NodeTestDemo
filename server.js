@@ -1,7 +1,11 @@
 'use strict';
 
 var AV = require('leanengine');
+var app = require('./app');
 var config = require('./config.js');
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 
 AV.init({
   appId: "5ubk617rzfa913c94ffaq8sg6o4tk0rebptuo10yjgd575yx", //process.env.LEANCLOUD_APP_ID ||
@@ -12,13 +16,11 @@ AV.init({
 // 如果不希望使用 masterKey 权限，可以将下面一行删除
 AV.Cloud.useMasterKey();
 
-var app = require('./app');
-
 // 端口一定要从环境变量 `LEANCLOUD_APP_PORT` 中获取。
 // LeanEngine 运行时会分配端口并赋值到该变量。
 var PORT = parseInt(process.env.LEANCLOUD_APP_PORT || process.env.PORT || 3000);
 
-app.listen(PORT, function (err) {
+server.listen(PORT, function (err) {
   console.log('Node app is running on port:', PORT);
 
   // 注册全局未捕获异常处理器
@@ -29,3 +31,66 @@ app.listen(PORT, function (err) {
     console.error('Unhandled Rejection at: Promise ', p, ' reason: ', reason.stack);
   });
 });
+
+// Chatroom
+
+var numUsers = 0;
+
+io.on('connection', function (socket) {
+  var addedUser = false;
+
+  // when the client emits 'new message', this listens and executes
+  socket.on('new message', function (data) {
+    // we tell the client to execute 'new message'
+    socket.broadcast.emit('new message', {
+      username: socket.username,
+      message: data
+    });
+  });
+
+  // when the client emits 'add user', this listens and executes
+  socket.on('add user', function (username) {
+    if (addedUser) return;
+
+    // we store the username in the socket session for this client
+    socket.username = username;
+    ++numUsers;
+    addedUser = true;
+    socket.emit('login', {
+      numUsers: numUsers
+    });
+    // echo globally (all clients) that a person has connected
+    socket.broadcast.emit('user joined', {
+      username: socket.username,
+      numUsers: numUsers
+    });
+  });
+
+  // when the client emits 'typing', we broadcast it to others
+  socket.on('typing', function () {
+    socket.broadcast.emit('typing', {
+      username: socket.username
+    });
+  });
+
+  // when the client emits 'stop typing', we broadcast it to others
+  socket.on('stop typing', function () {
+    socket.broadcast.emit('stop typing', {
+      username: socket.username
+    });
+  });
+
+  // when the user disconnects.. perform this
+  socket.on('disconnect', function () {
+    if (addedUser) {
+      --numUsers;
+
+      // echo globally that this client has left
+      socket.broadcast.emit('user left', {
+        username: socket.username,
+        numUsers: numUsers
+      });
+    }
+  });
+});
+
