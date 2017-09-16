@@ -19,6 +19,9 @@ app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
+// Routing
+app.use(express.static(path.join(__dirname, 'public')));
+
 // 设置默认超时时间
 app.use(timeout('15s'));
 
@@ -53,6 +56,10 @@ app.use(
         next();
 	}
 );
+
+app.get('/chat', function(req, res) {
+    res.render('../public/index', { currentTime: new Date() });
+});
 
 //首页
 app.get('/', function(req, res) {
