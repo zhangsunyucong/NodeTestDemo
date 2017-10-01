@@ -5,7 +5,7 @@ var app = require('./app');
 var config = require('./config.js');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-
+var socketReqAndResUtils = require('./lib/util/socketReqAndResUtils.js').socketReqAndRes;
 
 AV.init({
   appId: "5ubk617rzfa913c94ffaq8sg6o4tk0rebptuo10yjgd575yx", //process.env.LEANCLOUD_APP_ID ||
@@ -42,17 +42,21 @@ io.on('connection', function (socket) {
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function (data) {
     // we tell the client to execute 'new message'
+    data = socketReqAndResUtils.getSocketReqStringData(data);
     socket.broadcast.emit('new message', {
       username: socket.username,
       message: data
     });
+
   });
 
-  // when the client emits 'add user', this listens and executes
+  // when the client emits 'ad11d user', this listens and executes
   socket.on('add user', function (username) {
+
+    username = socketReqAndResUtils.getSocketReqStringData(username);
+
     if (addedUser) return;
 
-    // we store the username in the socket session for this client
     socket.username = username;
     ++numUsers;
     addedUser = true;
@@ -61,9 +65,9 @@ io.on('connection', function (socket) {
     });
     // echo globally (all clients) that a person has connected
     socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
+          username: username,
+          numUsers: numUsers
+        });
   });
 
   // when the client emits 'typing', we broadcast it to others

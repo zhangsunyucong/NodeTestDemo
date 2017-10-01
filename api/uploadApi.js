@@ -9,7 +9,7 @@ AV.Cloud.useMasterKey();
 exports.upload = function (app) {
     app.post('/upload', function(req, res){
         var form = new multiparty.Form();
-        form.parse(req, function(err, fields, files) {files.file.length
+        form.parse(req, function(err, fields, files) {
             //var iconFile = files.iconImage[0];
            // var fileOne = files.upload[0]
             var iconFile = files.file;
@@ -22,7 +22,10 @@ exports.upload = function (app) {
                     }
                     var theFile = new AV.File(file.originalFilename, data);
                     theFile.save().then(function(theFile){JSON.stringify(theFile);
-                        //theFile.attributes.url
+                        fs.unlink(file.path, function (err) {
+                                 if (err) return console.log(err);
+                                 console.log('文件删除成功');
+                             })
                         resUtils.resWithData(res, theFile, "上传成功！", 200);
                     }, function (error) {
                         resUtils.resWithData(res, theFile, "上传失败！", 202);

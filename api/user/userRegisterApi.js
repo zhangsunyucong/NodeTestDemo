@@ -34,7 +34,7 @@ exports.userRegisterApi = function(app) {
 
         var userPhoneNum = req.body.userPhoneNum;
 
-        if(!decAndEncHelper.valideSign(req)) {
+        if(!decAndEncHelper.valideReqSign(req)) {
             return;
         }
 
@@ -77,7 +77,7 @@ exports.userRegisterApi = function(app) {
         var smsCode = req.body.smsCode;
         var password = req.body.password;
 
-        if(!decAndEncHelper.valideSign(req)) {
+        if(!decAndEncHelper.valideReqSign(req)) {
             return;
         }
 
@@ -132,7 +132,7 @@ exports.userRegisterApi = function(app) {
         var userName = req.body.userName;
         var password = req.body.password;
 
-        if(!decAndEncHelper.valideSign(req)) {
+        if(!decAndEncHelper.valideReqSign(req)) {
             return;
         }
 
