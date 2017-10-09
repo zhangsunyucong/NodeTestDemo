@@ -2,6 +2,7 @@
 
 一、首先确认本机已经安装 Node.js 运行环境和 LeanCloud 命令行工具。（非必须，为leandcloud代码托管工具）
   根据不同的平台安装命令行工具 CLI。https://leancloud.cn/docs/leanengine_cli.html#Windows
+  
 二、下载源码：
     git clone https://github.com/zhangsunyucong/NodeTestDemo.git
     
