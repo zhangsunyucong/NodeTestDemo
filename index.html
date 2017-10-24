@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  
+	<div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-sm-6 col-md-8">
+			<h1>h1. Bootstrap heading</h1>
+			<h2>h1. Bootstrap heading</h2>
+			<h3>h1. Bootstrap heading</h3>
+			<h4>h1. Bootstrap heading</h4>
+			<h5>h1. Bootstrap heading</h5>
+		  </div>
+		  <div class="col-xs-6 col-md-4">
+			<p class="lead text-left">
+				Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+			</p>
+			<p>
+				Cum sociis natoque penatibus et magnis dis parturient <mark>montes</mark>, nascetur <del>ridiculus mus</del>. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+			</p>
+			<p>
+				Maecenas sed diam eget <s>risus varius blandit</s> sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+			</p>
+		  </div>
+		</div>
+		<address class="text-center">
+			<strong>Full Name</strong><br>
+			<a href="mailto:#">first.last@example.com</a>
+		</address>
+		
+		<div class="col-xs-12 col-sm-6">
+		
+			<div>
+				<ul>
+				  <li>Lorem ipsum dolor sit amet</li>
+				  <li>Consectetur adipiscing elit</li>
+				  <li>Integer molestie lorem at massa</li>
+				  <li>Facilisis in pretium nisl aliquet</li>
+				  <li>Vestibulum laoreet porttitor sem</li>
+				</ul>
+			</div>
+		
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div>
+				<ol class="list-unstyled">
+				  <li>Lorem ipsum dolor sit amet</li>
+				  <li>Consectetur adipiscing elit</li>
+				  <li>Integer molestie lorem at massa</li>
+				  <li>Facilisis in pretium nisl aliquet</li>
+				  <li>Vestibulum laoreet porttitor sem</li>
+				</ol>
+			</div>
+		</div>
+		
+		<dl>
+		  <dt>Description lists</dt>
+		  <dd>A description list is perfect for defining terms.</dd>
+		  <dt>Description lists</dt>
+		  <dd>A description list is perfect for defining terms.</dd>
+		</dl>
+		
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<caption class="text-center"><strong>表标题啦</strong></caption>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>UserName</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>1</th>
+						<td>Mark</td>
+						<td>Otto</td>
+						<td>Mark Otto</td>
+					</tr>
+					<tr>
+						<th>2</th>
+						<td>zhangsun</td>
+						<td>yucong</td>
+						<td>zhangsunyucong</td>
+					</tr>
+					<tr>
+						<th>3</th>
+						<td>he</td>
+						<td>yunjian</td>
+						<td>heyunjian</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<form class="form-inline">
+			<div class="form-group has-warning">
+				<label>Email address</label>
+				<div class="input-group">
+					<input type="email" class="form-control" placeholder="Email">
+					<div class="input-group-addon">qq.com</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input type="password" class="form-control" placeholder="Password">
+			</div>
+			<div class="form-group">
+				<label>File input</label>
+				<input type="file" class="form-control">
+			</div>
+			<button type="submit" class="btn btn-deafault">提交</button>
+		</form>
+	
+		<select class="form-control">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+		</select>
+
+		<div class="form-group has-success has-feedback">
+		  <label class="control-label" for="inputGroupSuccess1">Input group with success</label>
+		  <div class="input-group">
+			<span class="input-group-addon">@</span>
+			<input type="text" class="form-control" id="inputGroupSuccess1" aria-describedby="inputGroupSuccess1Status">
+		  </div>
+		  <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		  <span id="inputGroupSuccess1Status" class="sr-only">(success)</span>
+		</div>
+		
+		<div class="dropdown dropup">
+		
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Dropdown
+			<span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			<li><a href="#">Action</a></li>
+			<li><a href="#">Another action</a></li>
+			<li><a href="#">Something else here</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="#">Separated link</a></li>
+		  </ul>
+		</div>
+		
+		<div class="btn-group btn-group-lg">
+			<button type="button", class="btn btn-deafault">Left</button>
+			<button type="button" class="btn btn-primary">Middle</button>
+			<button type="button" class="btn btn-danger">Right</button>
+		</div>
+		
+		<div class="btn-group btn-group-md btn-group-vertical">
+			<button type="button", class="btn btn-deafault">Left</button>
+			<button type="button" class="btn btn-primary">Middle</button>
+			<button type="button" class="btn btn-danger">Right</button>
+		</div>
+		
+		<div class="btn-group dropup" >
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Primary <span class="caret"></span>
+			<span class="sr-only">Toggle Dropdown</span></button>
+			
+			<ul class="dropdown-menu">
+				<li><a href="#">Action</a></li>
+				<li><a href="#">Another action</a></li>
+				<li><a href="#">Something else here</a></li>
+				<li><a href="#">Separated link</a></li>
+			</ul>
+		
+		</div>
+		
+		<ul class="nav nav-pills nav-justified">
+			<li role="presentation" class="active"><a href="#" >Home<span class="badge">42</span></a></li>
+			<li role="presentation"><a href="#">Profile</a></li>
+			<li role="presentation"><a href="#">Message</a></li>
+		</ul>
+		
+		<nav class="navbar navbar-inverse">
+		  <div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="#">Brand</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+				<li><a href="#">Link</a></li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">One more separated link</a></li>
+				  </ul>
+				</li>
+			  </ul>
+			  <form class="navbar-form navbar-left">
+				<div class="form-group">
+				  <input type="text" class="form-control" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			  </form>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Link</a></li>
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				  </ul>
+				</li>
+			  </ul>
+			</div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+		
+		<nav aria-label="Page navigation" class="text-center">
+		  <ul class="pagination">
+			<li>
+			  <a href="#" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			  </a>
+			</li>
+			<li><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">5</a></li>
+			<li>
+			  <a href="#" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			  </a>
+			</li>
+		  </ul>
+		</nav>
+		<nav aria-label="Page navigation" class="text-center">
+			<ul class="pager">
+				<li><a href="#">Previous</a></li>
+				<li><a href="#">Next</a></li>
+			</ul>
+		</nav>
+		 
+		 <div class="jumbotron">
+		  <h1>Hello, world!</h1>
+		  <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+		  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6 col-md-3">
+				<div class="thumbnail">
+					<img src="" alt="">
+					<div class="caption">
+						<h3>Thumbnail label</h3>
+						<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+						<p>
+							<a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-3"></div>
+			<div class="col-xs-6 col-md-3"></div>
+			<div class="col-xs-6 col-md-3"></div>
+		</div>
+		
+		
+		<div class="alert alert-success">Well done! You successfully read this important alert message.</div>
+		<div class="alert alert-info" role="alert">Heads up! This alert needs your attention, but it's not super important.</div>
+		
+		<ul class="list-group">
+			<li class="list-group-item">Crash just</li>
+			<li class="list-group-item">Dapibus ac facilisis in</li>
+			<li class="list-group-item">Morbi leo risus</li>
+			<li class="list-group-item">Porta ac consectetur ac</li>
+		</ul>
+
+		
+		<div class="well">
+			Look, I am in a large well!
+		</div>
+	
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
